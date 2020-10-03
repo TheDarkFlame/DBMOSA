@@ -2,6 +2,9 @@ package com.parker.david.temperature;
 
 import com.parker.david.SearchMetaInfo;
 
+/**
+ * control the temperature in a linear way, decreasing and increasing by a pre-defined amount
+ * */
 public class LinearSchedule implements TemperatureController {
 	/**
 	 * the amount we heat by upon changing temperature

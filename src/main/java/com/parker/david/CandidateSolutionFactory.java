@@ -7,12 +7,30 @@ import java.util.ArrayList;
  */
 public class CandidateSolutionFactory {
 
+	/**
+	 * a counter for the solution's ID. designed for easier comparison of solutions, never actually used for anything useful
+	 */
 	private int solutionCounter = 0;
+
+	/**
+	 * a set of objectives that we wish to satisfy
+	 */
 	ObjectiveSet objectives;
 
+	/**
+	 * a function to get a new candidate solution given a set of decision variables
+	 *
+	 * @param decisionVariables the set of decision variables that define this candidate solution
+	 */
 	public CandidateSolution getCandidateSolution(ArrayList<Double> decisionVariables) {
 		return new CandidateSolution(decisionVariables, solutionCounter++, this);
 	}
+
+	/**
+	 * constructor
+	 *
+	 * @param objectives the objective function set that the solutions aim to optimise
+	 */
 
 	CandidateSolutionFactory(ObjectiveSet objectives) {
 		this.objectives = objectives;

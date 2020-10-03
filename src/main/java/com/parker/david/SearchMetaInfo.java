@@ -1,11 +1,33 @@
 package com.parker.david;
 
+/**
+ * a data holding object that tracks the current state of the search
+ */
 public class SearchMetaInfo {
+	/**
+	 * the current epoch
+	 */
 	private int epoch;
+	/**
+	 * number of acceptances this epoch
+	 */
 	private int acceptances;
+	/**
+	 * number of rejections this epoch
+	 */
 	private int rejections;
+	/**
+	 * the current iteration
+	 */
 	private int iteration;
+	/**
+	 * the current temperature
+	 */
 	private double temperature;
+
+	/**
+	 * the number of iteration since last adding to the archive
+	 */
 	private int iterationsWithoutAddingToArchive;
 
 	/**

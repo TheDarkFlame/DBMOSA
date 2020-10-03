@@ -3,7 +3,7 @@ package com.parker.david.temperature;
 import com.parker.david.SearchMetaInfo;
 
 /**
- * apative cooling schedule based on the linear schedule
+ * adaptive cooling schedule based on the linear schedule
  * temperature changes by factor * epochfactor ^ (epoch)
  */
 public class AdaptiveSchedule extends LinearSchedule {

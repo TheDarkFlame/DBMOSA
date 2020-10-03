@@ -1,7 +1,7 @@
 package com.parker.david;
 
 import com.parker.david.epoch.EpochController;
-import com.parker.david.epoch.StaticLength;
+import com.parker.david.epoch.StaticAcceptanceRejectionDependant;
 import com.parker.david.initialisation.AcceptAll;
 import com.parker.david.initialisation.InitialTemperatureAssignment;
 import com.parker.david.search.MaxIterationsWithoutImprovement;
@@ -15,6 +15,9 @@ import java.util.Collections;
 
 public class Main {
 
+	/**
+	 * main function. Initialises a lot of variables and then runs DBMOSA with the initialisation completed
+	 */
 	public static void main(String[] args) {
 		//our constants
 		final int maxSolutionAcceptances = 6;
@@ -46,7 +49,7 @@ public class Main {
 
 		//generate our components
 		CandidateSolutionFactory solutionFactory = new CandidateSolutionFactory(objectives);
-		EpochController epochEnd = new StaticLength(maxSolutionAcceptances, maxSolutionRejections);
+		EpochController epochEnd = new StaticAcceptanceRejectionDependant(maxSolutionAcceptances, maxSolutionRejections);
 		TemperatureController temperatureController = new GeometricSchedule(coolingCoefficient, heatingCoefficient);
 		TerminationController stoppingCriterion = new MaxIterationsWithoutImprovement(100);
 		SolutionFromNeighbourhoodGenerator nextNeighbourGenerator = new RandomDistanceFromOriginal(maxDecisionVariableVariation, constraints); // next neighbour generator
