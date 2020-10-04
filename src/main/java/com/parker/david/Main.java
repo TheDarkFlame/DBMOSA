@@ -50,7 +50,7 @@ public class Main {
 		final double minDecisionVariableVariation = 0.1;
 		final int initialisationAcceptedSolutionsNeeded = 10;
 		final int iterationsWithoutImprovement = 100;
-		final int maxArchiveSize = 100;
+		final int maxArchiveSize = 1000;
 		final double minimumTemperature = 0.0001;
 
 		//set our constraints
@@ -142,17 +142,21 @@ public class Main {
 		}
 
 		//write the data out to a file
-		FileWriter dataOutput = new FileWriter("output/data_" + ZonedDateTime.now(ZoneId.of("GMT+2")).format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss-SS")) + ".csv", true);
-		archive.getArchive().stream().sorted().forEach(sol -> sol.writeToFile(dataOutput));
-		dataOutput.close();
+		String date = ZonedDateTime.now(ZoneId.of("GMT+2")).format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss-SS"));
+
+		FileWriter fitnessOutput = new FileWriter("output/fitness_" + date + ".csv", true);
+		archive.getArchive().forEach(sol -> sol.fitnessToFile(fitnessOutput));
+		fitnessOutput.close();
+
+		FileWriter decisionVariableOutput = new FileWriter("output/decisions_" + date + ".csv", true);
+		archive.getArchive().forEach(sol -> sol.decisionVariablesToFile(decisionVariableOutput));
+		decisionVariableOutput.close();
 
 		//write the summary information to console and a file
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("final epochs: ").append(searchMeta.getEpoch()).append("\n");
-		stringBuilder.append("final iteration count: ").append(searchMeta.getIteration()).append("\n");
-		stringBuilder.append("final temperature: ").append(searchMeta.getTemperature()).append("\n");
-		stringBuilder.append("final set of (").append(archive.getArchive().size()).append(") solutions: ").append("\n");
-		archive.getArchive().stream().sorted().map(CandidateSolution::toString).forEach(solutionString -> stringBuilder.append(solutionString).append("\n"));
-		return stringBuilder.toString();
+		return "final epochs: " + searchMeta.getEpoch() + "\n" +
+				"final iteration count: " + searchMeta.getIteration() + "\n" +
+				"final temperature: " + searchMeta.getTemperature() + "\n" +
+				"final set of (" + archive.getArchive().size() + ") solutions: " + "\n" +
+				"data timestamp : " + date + "\n";
 	}
 }

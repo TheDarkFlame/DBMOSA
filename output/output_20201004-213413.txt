@@ -1,0 +1,14 @@
+final epochs: 3837
+final iteration count: 35529
+final temperature: 0.05147767227051623
+final set of (864) solutions:
+
+final epochs: 220
+final iteration count: 1914
+final temperature: 0.00452592555681761
+final set of (7) solutions:
+
+final epochs: 3300
+final iteration count: 30657
+final temperature: 0.042793791251729565
+final set of (357) solutions: 
