@@ -19,6 +19,15 @@ public class RandomDistanceFromOriginal implements SolutionFromNeighbourhoodGene
 	private final Random randomNumberGenerator = ThreadLocalRandom.current();
 
 	/**
+	 * set a new max variation per decision variable
+	 *
+	 * @param maxDecisionVariableChange the max change per each decision variable
+	 */
+	public void setMaxDecisionVariableChange(double maxDecisionVariableChange) {
+		this.maxDecisionVariableChange = maxDecisionVariableChange;
+	}
+
+	/**
 	 * the max any decision variable may be changed, independent of any other decision variable
 	 */
 	double maxDecisionVariableChange;
