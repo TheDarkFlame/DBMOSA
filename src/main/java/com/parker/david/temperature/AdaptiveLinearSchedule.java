@@ -6,7 +6,7 @@ import com.parker.david.SearchMetaInfo;
  * adaptive cooling schedule based on the linear schedule
  * temperature changes by factor * epochfactor ^ (epoch)
  */
-public class AdaptiveSchedule extends LinearSchedule {
+public class AdaptiveLinearSchedule extends LinearSchedule {
 	private double epochFactor;
 
 	/**
@@ -17,7 +17,7 @@ public class AdaptiveSchedule extends LinearSchedule {
 	 * @param heatingIncrement the amount we heat by
 	 * @param minTemperature   the minimum temperature
 	 */
-	public AdaptiveSchedule(double coolingIncrement, double heatingIncrement, double minTemperature, double epochFactor) {
+	public AdaptiveLinearSchedule(double coolingIncrement, double heatingIncrement, double minTemperature, double epochFactor) {
 		super(coolingIncrement, heatingIncrement, minTemperature);
 		this.epochFactor = (epochFactor > 0) ? epochFactor : 1; //check for 0
 	}

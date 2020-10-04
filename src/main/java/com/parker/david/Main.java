@@ -9,7 +9,7 @@ import com.parker.david.initialisation.AcceptAll;
 import com.parker.david.initialisation.InitialTemperatureAssignment;
 import com.parker.david.search.MaxIterationsWithoutImprovement;
 import com.parker.david.search.TerminationController;
-import com.parker.david.temperature.GeometricSchedule;
+import com.parker.david.temperature.AdaptiveLinearSchedule;
 import com.parker.david.temperature.TemperatureController;
 
 import java.io.FileWriter;
@@ -46,6 +46,9 @@ public class Main {
 		final int maxSolutionRejections = 6;
 		final double coolingCoefficient = 0.9;
 		final double heatingCoefficient = 1.1;
+		final double heatingDelta = 0.10;
+		final double coolingDelta = 0.15;
+		final double epochTemperatureFactor = 0.8;
 		final double maxDecisionVariableVariation = 100.0;
 		final double minDecisionVariableVariation = 0.1;
 		final int initialisationAcceptedSolutionsNeeded = 10;
@@ -77,7 +80,8 @@ public class Main {
 		//generate our components
 		CandidateSolutionFactory solutionFactory = new CandidateSolutionFactory(objectives, 2);
 		EpochController epochEnd = new StaticAcceptanceRejectionDependant(maxSolutionAcceptances, maxSolutionRejections);
-		TemperatureController temperatureController = new GeometricSchedule(coolingCoefficient, heatingCoefficient, minimumTemperature);
+//		TemperatureController temperatureController = new GeometricSchedule(coolingCoefficient, heatingCoefficient, minimumTemperature);
+		TemperatureController temperatureController = new AdaptiveLinearSchedule(coolingDelta, heatingDelta, minimumTemperature, epochTemperatureFactor);
 		TerminationController stoppingCriterion = new MaxIterationsWithoutImprovement(iterationsWithoutImprovement);
 
 		//generate an initial solution
