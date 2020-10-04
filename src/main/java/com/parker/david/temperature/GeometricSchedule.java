@@ -18,14 +18,21 @@ public class GeometricSchedule implements TemperatureController {
 	private final double heatingCoefficient;
 
 	/**
+	 * the minimum temperature that we may have
+	 */
+	private final double minTemperature;
+
+	/**
 	 * constructor
 	 *
 	 * @param coolingCoefficient set cooling coefficient
 	 * @param heatingCoefficient set heating coefficient
+	 * @param minTemp            the min temperature
 	 */
-	public GeometricSchedule(double coolingCoefficient, double heatingCoefficient) {
+	public GeometricSchedule(double coolingCoefficient, double heatingCoefficient, double minTemp) {
 		this.coolingCoefficient = coolingCoefficient;
 		this.heatingCoefficient = heatingCoefficient;
+		this.minTemperature = minTemp;
 	}
 
 	/**
@@ -35,7 +42,8 @@ public class GeometricSchedule implements TemperatureController {
 	 */
 	@Override
 	public void cool(SearchMetaInfo searchMeta) {
-		searchMeta.setTemperature(searchMeta.getTemperature() * coolingCoefficient);
+		//prevent going below mintemperature
+		searchMeta.setTemperature(Math.max(searchMeta.getTemperature() * coolingCoefficient, minTemperature));
 	}
 
 	/**

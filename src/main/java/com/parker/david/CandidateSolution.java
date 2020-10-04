@@ -91,7 +91,7 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
 	 */
 	public void writeToFile(FileWriter f) {
 		try {
-			f.append(decisionVariables.stream().map(aDouble -> String.format("%.6f", aDouble)).collect(Collectors.joining(", ")));
+			f.append(getFitnesses().stream().map(fitness -> String.format("%.6f", fitness)).collect(Collectors.joining(", "))).append("\n");
 		} catch (IOException ignored) {
 			System.out.println("data not written");
 

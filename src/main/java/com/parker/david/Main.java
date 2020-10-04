@@ -51,6 +51,7 @@ public class Main {
 		final int initialisationAcceptedSolutionsNeeded = 10;
 		final int iterationsWithoutImprovement = 100;
 		final int maxArchiveSize = 100;
+		final double minimumTemperature = 0.0001;
 
 		//set our constraints
 		final double maxRadius = 100000;
@@ -76,7 +77,7 @@ public class Main {
 		//generate our components
 		CandidateSolutionFactory solutionFactory = new CandidateSolutionFactory(objectives, 2);
 		EpochController epochEnd = new StaticAcceptanceRejectionDependant(maxSolutionAcceptances, maxSolutionRejections);
-		TemperatureController temperatureController = new GeometricSchedule(coolingCoefficient, heatingCoefficient);
+		TemperatureController temperatureController = new GeometricSchedule(coolingCoefficient, heatingCoefficient, minimumTemperature);
 		TerminationController stoppingCriterion = new MaxIterationsWithoutImprovement(iterationsWithoutImprovement);
 
 		//generate an initial solution
