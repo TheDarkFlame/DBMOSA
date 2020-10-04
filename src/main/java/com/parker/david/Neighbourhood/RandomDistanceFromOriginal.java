@@ -1,4 +1,7 @@
-package com.parker.david;
+package com.parker.david.Neighbourhood;
+
+import com.parker.david.CandidateSolution;
+import com.parker.david.ConstraintSet;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,7 +40,7 @@ public class RandomDistanceFromOriginal implements SolutionFromNeighbourhoodGene
 	 *
 	 * @param maxDecisionVariableChange the max change permitted for any decision variable
 	 */
-	RandomDistanceFromOriginal(double maxDecisionVariableChange, ConstraintSet constraints) {
+	public RandomDistanceFromOriginal(double maxDecisionVariableChange, ConstraintSet constraints) {
 		this.maxDecisionVariableChange = maxDecisionVariableChange;
 		this.constraints = constraints;
 	}

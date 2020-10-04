@@ -74,7 +74,7 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
 	 *
 	 * @return a new solution that is a copy of the current one
 	 */
-	CandidateSolution copy() {
+	public CandidateSolution copy() {
 		ArrayList<Double> copyOfDecisionVariables = new ArrayList<>();
 		for (Double decisionVariable : decisionVariables) {
 			copyOfDecisionVariables.add(decisionVariable);

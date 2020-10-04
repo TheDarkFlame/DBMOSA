@@ -1,5 +1,7 @@
 package com.parker.david;
 
+import com.parker.david.Neighbourhood.RandomDistanceFromOriginal;
+import com.parker.david.Neighbourhood.SolutionFromNeighbourhoodGenerator;
 import com.parker.david.epoch.EpochController;
 import com.parker.david.epoch.StaticAcceptanceRejectionDependant;
 import com.parker.david.initialisation.AcceptAll;

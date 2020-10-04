@@ -1,4 +1,6 @@
-package com.parker.david;
+package com.parker.david.Neighbourhood;
+
+import com.parker.david.CandidateSolution;
 
 import java.util.ArrayList;
 

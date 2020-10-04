@@ -1,6 +1,7 @@
 package com.parker.david.initialisation;
 
 import com.parker.david.*;
+import com.parker.david.Neighbourhood.SolutionFromNeighbourhoodGenerator;
 
 import java.util.ArrayList;
 
