@@ -8,6 +8,11 @@ import java.util.ArrayList;
 public class CandidateSolutionFactory {
 
 	/**
+	 * the number of digits behind the decimal place which doubles may have
+	 */
+	int doubleDecimalRoundOff;
+
+	/**
 	 * a counter for the solution's ID. designed for easier comparison of solutions, never actually used for anything useful
 	 */
 	private int solutionCounter = 0;
@@ -23,17 +28,31 @@ public class CandidateSolutionFactory {
 	 * @param decisionVariables the set of decision variables that define this candidate solution
 	 */
 	public CandidateSolution getCandidateSolution(ArrayList<Double> decisionVariables) {
-		return new CandidateSolution(decisionVariables, solutionCounter++, this);
+		ArrayList<Double> rounded = new ArrayList<>();
+		for (Double decisionVariable : decisionVariables) {
+			rounded.add(round(decisionVariable));
+		}
+		return new CandidateSolution(rounded, solutionCounter++, this);
+	}
+
+	/**
+	 * rounds a number based on the defined decimal roundoff
+	 */
+	private double round(double number) {
+		double factor = Math.pow(10, doubleDecimalRoundOff);
+		return Math.round(number * factor) / factor;
 	}
 
 	/**
 	 * constructor
 	 *
-	 * @param objectives the objective function set that the solutions aim to optimise
+	 * @param doubleDecimalRoundOff the number of digits after the decimal for doubles
+	 * @param objectives            the objective function set that the solutions aim to optimise
 	 */
 
-	CandidateSolutionFactory(ObjectiveSet objectives) {
+	CandidateSolutionFactory(ObjectiveSet objectives, int doubleDecimalRoundOff) {
 		this.objectives = objectives;
+		this.doubleDecimalRoundOff = doubleDecimalRoundOff;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.parker.david;
 
 import com.parker.david.Neighbourhood.RandomDistanceFromOriginal;
+import com.parker.david.Neighbourhood.RandomDistanceFromOriginalEpochAdaptive;
 import com.parker.david.Neighbourhood.SolutionFromNeighbourhoodGenerator;
 import com.parker.david.epoch.EpochController;
 import com.parker.david.epoch.StaticAcceptanceRejectionDependant;
@@ -26,9 +27,9 @@ public class Main {
 	 * main function. Initialises a lot of variables and then runs DBMOSA with the initialisation completed
 	 */
 	public static void main(String[] args) throws IOException {
-		//run 10 times
+		//run 3 times
 		FileWriter output = new FileWriter("output/output_" + ZonedDateTime.now(ZoneId.of("GMT+2")).format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")) + ".txt", true);
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 3; i++) {
 			String thisRun = initialiseAndRunDbmosa() + "\n\n";
 			System.out.print(thisRun);
 			output.append(thisRun);
@@ -39,15 +40,17 @@ public class Main {
 	/**
 	 * set up the algorithm parameters and then run it
 	 */
-	private static String initialiseAndRunDbmosa() {
+	private static String initialiseAndRunDbmosa() throws IOException {
 		//our search parameters
 		final int maxSolutionAcceptances = 6;
 		final int maxSolutionRejections = 6;
 		final double coolingCoefficient = 0.9;
 		final double heatingCoefficient = 1.1;
 		final double maxDecisionVariableVariation = 100.0;
+		final double minDecisionVariableVariation = 0.1;
 		final int initialisationAcceptedSolutionsNeeded = 10;
 		final int iterationsWithoutImprovement = 100;
+		final int maxArchiveSize = 100;
 
 		//set our constraints
 		final double maxRadius = 100000;
@@ -71,11 +74,10 @@ public class Main {
 		});
 
 		//generate our components
-		CandidateSolutionFactory solutionFactory = new CandidateSolutionFactory(objectives);
+		CandidateSolutionFactory solutionFactory = new CandidateSolutionFactory(objectives, 2);
 		EpochController epochEnd = new StaticAcceptanceRejectionDependant(maxSolutionAcceptances, maxSolutionRejections);
 		TemperatureController temperatureController = new GeometricSchedule(coolingCoefficient, heatingCoefficient);
 		TerminationController stoppingCriterion = new MaxIterationsWithoutImprovement(iterationsWithoutImprovement);
-		SolutionFromNeighbourhoodGenerator nextNeighbourGenerator = new RandomDistanceFromOriginal(maxDecisionVariableVariation, constraints); // next neighbour generator
 
 		//generate an initial solution
 		CandidateSolution solution = solutionFactory.getCandidateSolution(new ArrayList<>(Collections.singletonList(0.0))); // our base solution is at the origin
@@ -88,25 +90,28 @@ public class Main {
 		extremalSolutions.add(solutionFactory.getCandidateSolution(new ArrayList<>(Collections.singletonList(2.0)))); //the zero for (x-2)^2
 		extremalSolutions.add(solutionFactory.getCandidateSolution(new ArrayList<>(Collections.singletonList(-100000.0)))); //the min value for x
 
-		//generate the initial temperature
+		//generate the initial temperature, note that we can't use an adaptive generation method here as there is no search meta yet (which contains the temperature)
 		InitialTemperatureAssignment initialTemperatureAssignment = new AcceptAll(initialisationAcceptedSolutionsNeeded, extremalSolutions);
-		double initialTemperature = initialTemperatureAssignment.getInitialTemperature(solution, objectives, nextNeighbourGenerator);
+		double initialTemperature = initialTemperatureAssignment.getInitialTemperature(solution, objectives, new RandomDistanceFromOriginal(maxDecisionVariableVariation, constraints));
+
+		//create an object to hold the search progress
+		SearchMetaInfo searchMeta = new SearchMetaInfo(initialTemperature);
+		SolutionFromNeighbourhoodGenerator nextNeighbourGenerator = new RandomDistanceFromOriginalEpochAdaptive(maxDecisionVariableVariation, minDecisionVariableVariation, constraints, searchMeta); // next neighbour generator
 
 		//run the algorithm
-		return dbmosa(initialTemperature, temperatureController, solution, nextNeighbourGenerator, stoppingCriterion, epochEnd);
+		return dbmosa(searchMeta, temperatureController, solution, nextNeighbourGenerator, stoppingCriterion, epochEnd, maxArchiveSize);
 	}
 
 	/**
 	 * the DBMOSA algorithm itself
 	 */
-	public static String dbmosa(double startingTemperature, TemperatureController tempControl, CandidateSolution solution, SolutionFromNeighbourhoodGenerator neighbourhoodGenerator, TerminationController stoppingCriterion, EpochController epochEnd) {
+	public static String dbmosa(SearchMetaInfo searchMeta, TemperatureController tempControl, CandidateSolution solution, SolutionFromNeighbourhoodGenerator neighbourhoodGenerator, TerminationController stoppingCriterion, EpochController epochEnd, int maxArchiveSize) throws IOException {
 
 		SolutionArchive archive = new SolutionArchive(); // create an archive
-		SearchMetaInfo searchMeta = new SearchMetaInfo(startingTemperature);
 		archive.addIfNotDominated(solution); // add in our initial solution
 
 		//begin our iterations
-		while (stoppingCriterion.continueSearch(searchMeta)) {
+		while (stoppingCriterion.continueSearch(searchMeta) && archive.getArchive().size() < maxArchiveSize) {
 
 			//generate a new solution
 			CandidateSolution newSolution = neighbourhoodGenerator.neighbourhoodSolution(solution);
@@ -135,12 +140,18 @@ public class Main {
 			}
 		}
 
+		//write the data out to a file
+		FileWriter dataOutput = new FileWriter("output/data_" + ZonedDateTime.now(ZoneId.of("GMT+2")).format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss-SS")) + ".csv", true);
+		archive.getArchive().stream().sorted().forEach(sol -> sol.writeToFile(dataOutput));
+		dataOutput.close();
+
+		//write the summary information to console and a file
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("final epochs: ").append(searchMeta.getEpoch()).append("\n");
 		stringBuilder.append("final iteration count: ").append(searchMeta.getIteration()).append("\n");
-		stringBuilder.append("final temperature: ").append(String.format("%.6f", searchMeta.getTemperature())).append("\n");
+		stringBuilder.append("final temperature: ").append(searchMeta.getTemperature()).append("\n");
 		stringBuilder.append("final set of (").append(archive.getArchive().size()).append(") solutions: ").append("\n");
-		archive.getArchive().stream().map(CandidateSolution::toString).forEach(solutionString -> stringBuilder.append(solutionString).append("\n"));
+		archive.getArchive().stream().sorted().map(CandidateSolution::toString).forEach(solutionString -> stringBuilder.append(solutionString).append("\n"));
 		return stringBuilder.toString();
 	}
 }

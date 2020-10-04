@@ -33,8 +33,12 @@ public class SolutionArchive {
 		// if the solution is dominated by anything in the archive, do nothing
 		for (CandidateSolution bestSolution : mostOptimalSolutions) {
 			if (bestSolution.dominates(solution))
-				//solution is not added to archive, return false
+				//solution is not added to archive because it is dominated, return false
 				return false;
+			if (solution.isEqual(bestSolution)) {
+				//if solution is already in the archive don't add it again
+				return false;
+			}
 		}
 
 		// remove any solutions from the archive that are dominated by the new solution

@@ -34,7 +34,6 @@ public class SearchMetaInfo {
 	 * constructor
 	 */
 	SearchMetaInfo(double initialTemperature) {
-		this.temperature = initialTemperature;
 		this.iterationsWithoutAddingToArchive = 0;
 		this.epoch = 1;
 	}

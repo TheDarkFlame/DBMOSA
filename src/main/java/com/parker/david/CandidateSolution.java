@@ -1,5 +1,7 @@
 package com.parker.david;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -85,6 +87,18 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
 	}
 
 	/**
+	 * write only the data to a file
+	 */
+	public void writeToFile(FileWriter f) {
+		try {
+			f.append(decisionVariables.stream().map(aDouble -> String.format("%.6f", aDouble)).collect(Collectors.joining(", ")));
+		} catch (IOException ignored) {
+			System.out.println("data not written");
+
+		}
+	}
+
+	/**
 	 * toString method formats out Candidate solution nicely as an array of 0 and 1.
 	 * example output: [9.4,7.2]
 	 *
@@ -127,6 +141,18 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
 			return -1; //other dominates this -> fitness deltas are all negative, and at least one is non-zero
 		else
 			return 0; //neither dominates -> fitness deltas are a mix of positive and negative or deltas all are zero
+	}
+
+	/**
+	 * if the decision variables are equal the solutions are equal
+	 */
+	public boolean isEqual(CandidateSolution other) {
+		//check each decision variable, if they are not equal return false
+		for (int i = 0; i < decisionVariables.size(); i++) {
+			if (this.decisionVariables.get(i).doubleValue() != other.decisionVariables.get(i).doubleValue())
+				return false;
+		}
+		return true;
 	}
 
 	/**
