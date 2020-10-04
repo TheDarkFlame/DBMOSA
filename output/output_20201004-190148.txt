@@ -1,0 +1,84 @@
+final epochs: 28
+final iteration count: 233
+final temperature: 0.188237
+final set of (3) solutions: 
+decision variables: [1.516128], fitnesses: [2.2986430.234132]
+decision variables: [2.099627], fitnesses: [4.4084320.009925]
+decision variables: [1.084957], fitnesses: [1.1771310.837304]
+
+
+final epochs: 17
+final iteration count: 118
+final temperature: 0.380042
+final set of (1) solutions: 
+decision variables: [76704.890789], fitnesses: [5883640270.8824015883333455.319247]
+
+
+final epochs: 139
+final iteration count: 1217
+final temperature: 0.217513
+final set of (1) solutions: 
+decision variables: [2.152799], fitnesses: [4.6345440.023348]
+
+
+final epochs: 301
+final iteration count: 2727
+final temperature: 0.277711
+final set of (3) solutions: 
+decision variables: [-0.052074], fitnesses: [0.0027124.211008]
+decision variables: [0.569500], fitnesses: [0.3243302.046331]
+decision variables: [2.920952], fitnesses: [8.5319620.848153]
+
+
+final epochs: 457
+final iteration count: 4136
+final temperature: 0.176020
+final set of (3) solutions: 
+decision variables: [1.808292], fitnesses: [3.2699190.036752]
+decision variables: [-0.160018], fitnesses: [0.0256064.665676]
+decision variables: [0.622517], fitnesses: [0.3875271.897460]
+
+
+final epochs: 337
+final iteration count: 3045
+final temperature: 0.278105
+final set of (3) solutions: 
+decision variables: [1.515937], fitnesses: [2.2980650.234317]
+decision variables: [0.714033], fitnesses: [0.5098431.653711]
+decision variables: [-0.096715], fitnesses: [0.0093544.396212]
+
+
+final epochs: 300
+final iteration count: 2750
+final temperature: 0.202806
+final set of (3) solutions: 
+decision variables: [0.601032], fitnesses: [0.3612401.957111]
+decision variables: [0.614294], fitnesses: [0.3773571.920182]
+decision variables: [0.871444], fitnesses: [0.7594151.273638]
+
+
+final epochs: 352
+final iteration count: 3141
+final temperature: 0.229049
+final set of (2) solutions: 
+decision variables: [2.726595], fitnesses: [7.4343200.527940]
+decision variables: [-1.053121], fitnesses: [1.1090649.321549]
+
+
+final epochs: 36
+final iteration count: 307
+final temperature: 0.265203
+final set of (1) solutions: 
+decision variables: [-1.259047], fitnesses: [1.58519910.621387]
+
+
+final epochs: 205
+final iteration count: 1843
+final temperature: 0.127731
+final set of (4) solutions: 
+decision variables: [1.257455], fitnesses: [1.5811940.551373]
+decision variables: [0.591599], fitnesses: [0.3499901.983592]
+decision variables: [0.845433], fitnesses: [0.7147561.333026]
+decision variables: [0.249207], fitnesses: [0.0621043.065275]
+
+

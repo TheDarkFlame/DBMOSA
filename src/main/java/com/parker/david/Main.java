@@ -136,9 +136,9 @@ public class Main {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("final epochs: ").append(searchMeta.getEpoch()).append("\n");
 		stringBuilder.append("final iteration count: ").append(searchMeta.getIteration()).append("\n");
-		stringBuilder.append("final temperature: ").append(searchMeta.getTemperature()).append("\n");
+		stringBuilder.append("final temperature: ").append(String.format("%.6f", searchMeta.getTemperature())).append("\n");
 		stringBuilder.append("final set of (").append(archive.getArchive().size()).append(") solutions: ").append("\n");
-		archive.getArchive().stream().map(CandidateSolution::toString).forEach(stringBuilder::append);
+		archive.getArchive().stream().map(CandidateSolution::toString).forEach(solutionString -> stringBuilder.append(solutionString).append("\n"));
 		return stringBuilder.toString();
 	}
 }

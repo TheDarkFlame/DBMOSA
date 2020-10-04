@@ -92,8 +92,8 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
 	 */
 	@Override
 	public String toString() {
-		return "decision variables: [" + decisionVariables.stream().map(aDouble -> Double.toString(aDouble)).collect(Collectors.joining()) +
-				"], fitnesses: [" + getFitnesses().stream().map(aDouble -> Double.toString(aDouble)).collect(Collectors.joining()) + "]";
+		return "decision variables: [" + decisionVariables.stream().map(aDouble -> String.format("%.6f", aDouble)).collect(Collectors.joining()) +
+				"], fitnesses: [" + getFitnesses().stream().map(aDouble -> String.format("%.6f", aDouble)).collect(Collectors.joining()) + "]";
 	}
 
 	/**
