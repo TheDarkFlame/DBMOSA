@@ -8,12 +8,18 @@ import com.parker.david.epoch.StaticAcceptanceRejectionDependant;
 import com.parker.david.initialisation.AcceptAll;
 import com.parker.david.initialisation.InitialTemperatureAssignment;
 import com.parker.david.search.MaxIterationsWithoutImprovement;
+import com.parker.david.search.MinimumFinalTemperature;
 import com.parker.david.search.TerminationController;
 import com.parker.david.temperature.AdaptiveLinearSchedule;
+import com.parker.david.temperature.GeometricSchedule;
 import com.parker.david.temperature.TemperatureController;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,13 +29,19 @@ import java.util.Collections;
 
 public class Main {
 
+	private static final String tempOutputPathPrefix = "output/temp/";
+
 	/**
 	 * main function. Initialises a lot of variables and then runs DBMOSA with the initialisation completed
 	 */
 	public static void main(String[] args) throws IOException {
+		//delete the old output data
+		FileUtils.deleteDirectory(new File(tempOutputPathPrefix));
+		Files.createDirectory(Paths.get(tempOutputPathPrefix));
+
 		//run 3 times
-		FileWriter output = new FileWriter("output/output_" + ZonedDateTime.now(ZoneId.of("GMT+2")).format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")) + ".txt", true);
-		for (int i = 0; i < 3; i++) {
+		FileWriter output = new FileWriter(tempOutputPathPrefix + "output_" + ZonedDateTime.now(ZoneId.of("GMT+2")).format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")) + ".txt", true);
+		for (int i = 0; i < 10; i++) {
 			String thisRun = initialiseAndRunDbmosa() + "\n\n";
 			System.out.print(thisRun);
 			output.append(thisRun);
@@ -42,19 +54,24 @@ public class Main {
 	 */
 	private static String initialiseAndRunDbmosa() throws IOException {
 		//our search parameters
-		final int maxSolutionAcceptances = 6;
-		final int maxSolutionRejections = 6;
-		final double coolingCoefficient = 0.9;
-		final double heatingCoefficient = 1.1;
+		final int maxSolutionAcceptances = 5;
+		final int maxSolutionRejections = 7;
+
+		final double coolingCoefficient = 0.95;
+		final double heatingCoefficient = 1.05;
 		final double heatingDelta = 0.10;
 		final double coolingDelta = 0.15;
-		final double epochTemperatureFactor = 0.8;
-		final double maxDecisionVariableVariation = 100.0;
+		final double epochTemperatureFactor = 0.99;
+		final double minimumTemperature = 0.001;
+
+		final double maxDecisionVariableVariation = 150.0;
 		final double minDecisionVariableVariation = 0.1;
+
 		final int initialisationAcceptedSolutionsNeeded = 10;
-		final int iterationsWithoutImprovement = 100;
+
+		final double terminationTemperature = 0.00001;
+		final int iterationsWithoutImprovement = 300;
 		final int maxArchiveSize = 1000;
-		final double minimumTemperature = 0.0001;
 
 		//set our constraints
 		final double maxRadius = 100000;
@@ -80,9 +97,10 @@ public class Main {
 		//generate our components
 		CandidateSolutionFactory solutionFactory = new CandidateSolutionFactory(objectives, 2);
 		EpochController epochEnd = new StaticAcceptanceRejectionDependant(maxSolutionAcceptances, maxSolutionRejections);
-//		TemperatureController temperatureController = new GeometricSchedule(coolingCoefficient, heatingCoefficient, minimumTemperature);
-		TemperatureController temperatureController = new AdaptiveLinearSchedule(coolingDelta, heatingDelta, minimumTemperature, epochTemperatureFactor);
+		TemperatureController temperatureController = new GeometricSchedule(coolingCoefficient, heatingCoefficient, minimumTemperature);
+//		TemperatureController temperatureController = new AdaptiveLinearSchedule(coolingDelta, heatingDelta, minimumTemperature, epochTemperatureFactor);
 		TerminationController stoppingCriterion = new MaxIterationsWithoutImprovement(iterationsWithoutImprovement);
+//		TerminationController stoppingCriterion = new MinimumFinalTemperature(terminationTemperature);
 
 		//generate an initial solution
 		CandidateSolution solution = solutionFactory.getCandidateSolution(new ArrayList<>(Collections.singletonList(0.0))); // our base solution is at the origin
@@ -148,11 +166,11 @@ public class Main {
 		//write the data out to a file
 		String date = ZonedDateTime.now(ZoneId.of("GMT+2")).format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss-SS"));
 
-		FileWriter fitnessOutput = new FileWriter("output/fitness_" + date + ".csv", true);
+		FileWriter fitnessOutput = new FileWriter(tempOutputPathPrefix + "fitness_" + date + ".csv", true);
 		archive.getArchive().forEach(sol -> sol.fitnessToFile(fitnessOutput));
 		fitnessOutput.close();
 
-		FileWriter decisionVariableOutput = new FileWriter("output/decisions_" + date + ".csv", true);
+		FileWriter decisionVariableOutput = new FileWriter(tempOutputPathPrefix + "decisions_" + date + ".csv", true);
 		archive.getArchive().forEach(sol -> sol.decisionVariablesToFile(decisionVariableOutput));
 		decisionVariableOutput.close();
 

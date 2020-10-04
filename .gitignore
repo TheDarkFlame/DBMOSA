@@ -2,3 +2,4 @@
 *.iml
 target
 doc/*.pdf
+/output/temp/

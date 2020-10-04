@@ -1,0 +1,70 @@
+final epochs: 417
+final iteration count: 2905
+final temperature: 0.06206885616925551
+final set of (34) solutions: 
+data timestamp : 20201004-233359-30
+
+
+final epochs: 959
+final iteration count: 6939
+final temperature: 0.01980389298673297
+final set of (105) solutions: 
+data timestamp : 20201004-233359-48
+
+
+final epochs: 510
+final iteration count: 3676
+final temperature: 0.03190179300184706
+final set of (40) solutions: 
+data timestamp : 20201004-233359-53
+
+
+final epochs: 722
+final iteration count: 6023
+final temperature: 0.02815352883338049
+final set of (43) solutions: 
+data timestamp : 20201004-233359-57
+
+
+final epochs: 702
+final iteration count: 5706
+final temperature: 0.04259568172904717
+final set of (44) solutions: 
+data timestamp : 20201004-233359-61
+
+
+final epochs: 440
+final iteration count: 3036
+final temperature: 0.02569370002708704
+final set of (39) solutions: 
+data timestamp : 20201004-233359-65
+
+
+final epochs: 1656
+final iteration count: 12796
+final temperature: 0.016189383310907524
+final set of (246) solutions: 
+data timestamp : 20201004-233400-17
+
+
+final epochs: 981
+final iteration count: 7960
+final temperature: 0.0261811628879108
+final set of (86) solutions: 
+data timestamp : 20201004-233400-25
+
+
+final epochs: 572
+final iteration count: 4346
+final temperature: 0.022843856220297637
+final set of (45) solutions: 
+data timestamp : 20201004-233400-29
+
+
+final epochs: 213
+final iteration count: 1548
+final temperature: 0.06526072867839364
+final set of (18) solutions: 
+data timestamp : 20201004-233400-30
+
+
